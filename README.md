@@ -2,14 +2,14 @@
 
 ## How do I install these formulae?
 
-`brew install thetillhoff/thetillhoff/<formula>`
+`brew install thetillhoff/tap/<formula>`
 
-Or `brew tap thetillhoff/thetillhoff` and then `brew install <formula>`.
+Or `brew tap thetillhoff/tap` and then `brew install <formula>`.
 
 Or, in a [`brew bundle`](https://github.com/Homebrew/homebrew-bundle) `Brewfile`:
 
 ```ruby
-tap "thetillhoff/thetillhoff"
+tap "thetillhoff/tap"
 brew "<formula>"
 ```
 
