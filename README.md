@@ -1,4 +1,4 @@
-# Thetillhoff Thetillhoff
+# thetillhoff/tap
 
 ## How do I install these formulae?
 
