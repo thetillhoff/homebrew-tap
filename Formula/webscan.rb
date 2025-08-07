@@ -8,8 +8,8 @@ class Webscan < Formula
 
   depends_on "go" => :build
   
-  url "https://github.com/thetillhoff/webscan/archive/refs/tags/v3.0.9.tar.gz"
-  sha256 "8c760e4f84f33b74f597806e3226773950be1fdaddda2b2b34175346dd5e1330"
+  url "https://github.com/thetillhoff/webscan/archive/refs/tags/v4.0.1.tar.gz"
+  sha256 "b6ff2d6af9c13f1a6b7fb9583a8ef5ee957d8e257bb5f557dedfdf94a6cfc0ad"
 
   # on_macos do
   #   if Hardware::CPU.intel?
