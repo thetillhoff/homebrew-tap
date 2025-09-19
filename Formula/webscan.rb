@@ -2,7 +2,7 @@ class Webscan < Formula
   desc "Verifies web things"
   homepage "https://github.com/thetillhoff/webscan"
   license "MIT"
-  version "v4.0.1"
+  version "<no value>"
 
   on_macos do
     on_arm do
@@ -29,7 +29,8 @@ class Webscan < Formula
   end
 
   def install
-    bin.install "webscan"
+    # Rename the downloaded file to 'webscan' and install it
+    bin.install Dir["webscan_*"].first => "webscan"
   end
 
   test do

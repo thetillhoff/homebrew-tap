@@ -29,7 +29,8 @@ class Webscan < Formula
   end
 
   def install
-    bin.install "webscan"
+    # Rename the downloaded file to 'webscan' and install it
+    bin.install Dir["webscan_*"].first => "webscan"
   end
 
   test do
