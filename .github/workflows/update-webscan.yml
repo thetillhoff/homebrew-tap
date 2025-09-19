@@ -75,6 +75,8 @@ jobs:
           LINUX_INTEL_SHA=$(cat ./checksums/webscan_linux_amd64.sha256)
           LINUX_ARM_SHA=$(cat ./checksums/webscan_linux_arm64.sha256)
 
+          cp template/webscan.rb Formula/webscan.rb
+
           # Update version
           sed -i "s/{{ .version }}/$LATEST_VERSION/g" Formula/webscan.rb
 
