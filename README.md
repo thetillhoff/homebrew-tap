@@ -1,18 +1,12 @@
-# thetillhoff/tap
+# homebrew-tap
 
-## How do I install these formulae?
+## Usage
 
-`brew install thetillhoff/tap/<formula>`
+```sh
+# Example
+brew tap thetillhoff/homebrew-tap
+brew install webscan
 
-Or `brew tap thetillhoff/tap` and then `brew install <formula>`.
-
-Or, in a [`brew bundle`](https://github.com/Homebrew/homebrew-bundle) `Brewfile`:
-
-```ruby
-tap "thetillhoff/tap"
-brew "<formula>"
+# Or
+brew install thetillhoff/homebrew-tap/webscan
 ```
-
-## Documentation
-
-`brew help`, `man brew` or check [Homebrew's documentation](https://docs.brew.sh).

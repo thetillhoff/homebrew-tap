@@ -6,24 +6,24 @@ class Webscan < Formula
 
   on_macos do
     on_arm do
-      url "https://github.com/yourorg/webscan/releases/download/#{version}/webscan_darwin_arm64"
+      url "#{homepage}/releases/download/#{version}/webscan_darwin_arm64"
       sha256 "{{ .macos_arm_sha }}"
     end
 
     on_intel do
-      url "https://github.com/yourorg/webscan/releases/download/#{version}/webscan_darwin_amd64"
+      url "#{homepage}/releases/download/#{version}/webscan_darwin_amd64"
       sha256 "{{ .macos_intel_sha }}"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/yourorg/webscan/releases/download/#{version}/webscan_linux_arm64"
+      url "#{homepage}/releases/download/#{version}/webscan_linux_arm64"
       sha256 "{{ .linux_arm_sha }}"
     end
 
     on_intel do
-      url "https://github.com/yourorg/webscan/releases/download/#{version}/webscan_linux_amd64"
+      url "#{homepage}/releases/download/#{version}/webscan_linux_amd64"
       sha256 "{{ .linux_intel_sha }}"
     end
   end
