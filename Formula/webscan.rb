@@ -7,9 +7,11 @@ class Webscan < Formula
   license "MIT"
 
   depends_on "go" => :build
-  
-  url "https://github.com/thetillhoff/webscan/archive/refs/tags/v4.0.1.tar.gz"
-  sha256 "b6ff2d6af9c13f1a6b7fb9583a8ef5ee957d8e257bb5f557dedfdf94a6cfc0ad"
+
+  # version = git describe --exact-match --tags
+
+  url "https://github.com/thetillhoff/webscan/archive/refs/tags/$(version)).tar.gz"
+  sha256 "9a9e5a6967dc5cfb58b167fa99762222ffc90089a92fdc3d23c04b4eee6301fd"
 
   # on_macos do
   #   if Hardware::CPU.intel?
