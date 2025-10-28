@@ -7,7 +7,7 @@ class Webscan < Formula
   on_macos do
     on_arm do
       url "#{homepage}/releases/download/#{version}/webscan_darwin_arm64"
-      sha256 "${$MACOS_ARM_SHA}"
+      sha256 "${MACOS_ARM_SHA}"
     end
 
     on_intel do
@@ -19,12 +19,12 @@ class Webscan < Formula
   on_linux do
     on_arm do
       url "#{homepage}/releases/download/#{version}/webscan_linux_arm64"
-      sha256 "${$LINUX_ARM_SHA}"
+      sha256 "${LINUX_ARM_SHA}"
     end
 
     on_intel do
       url "#{homepage}/releases/download/#{version}/webscan_linux_amd64"
-      sha256 "${$LINUX_INTEL_SHA}"
+      sha256 "${LINUX_INTEL_SHA}"
     end
   end
 

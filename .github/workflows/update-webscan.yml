@@ -70,13 +70,13 @@ jobs:
 
       - name: Update formula
         run: |
-          LATEST_VERSION="${{ needs.check-version.outputs.latest_version }}"
+          export LATEST_VERSION="${{ needs.check-version.outputs.latest_version }}"
 
           # Extract SHA256 values from downloaded files
-          MACOS_INTEL_SHA=$(cat ./checksums/webscan_darwin_amd64.sha256)
-          MACOS_ARM_SHA=$(cat ./checksums/webscan_darwin_arm64.sha256)
-          LINUX_INTEL_SHA=$(cat ./checksums/webscan_linux_amd64.sha256)
-          LINUX_ARM_SHA=$(cat ./checksums/webscan_linux_arm64.sha256)
+          export MACOS_INTEL_SHA=$(cat ./checksums/webscan_darwin_amd64.sha256)
+          export MACOS_ARM_SHA=$(cat ./checksums/webscan_darwin_arm64.sha256)
+          export LINUX_INTEL_SHA=$(cat ./checksums/webscan_linux_amd64.sha256)
+          export LINUX_ARM_SHA=$(cat ./checksums/webscan_linux_arm64.sha256)
 
           envsubst < template/webscan.rb > Formula/webscan.rb
 
