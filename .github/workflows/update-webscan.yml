@@ -48,7 +48,7 @@ jobs:
           curl -sLO "https://github.com/thetillhoff/webscan/releases/download/$LATEST_VERSION/webscan_${{ matrix.os }}_${{ matrix.arch }}.sha256"
 
       - name: Upload SHA256 artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: webscan_${{ matrix.os }}_${{ matrix.arch }}.sha256
           path: webscan_${{ matrix.os }}_${{ matrix.arch }}.sha256
@@ -62,7 +62,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Download all SHA256 artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           pattern: webscan_*.sha256
           path: ./checksums
