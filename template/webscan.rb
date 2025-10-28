@@ -2,29 +2,29 @@ class Webscan < Formula
   desc "Verifies web things"
   homepage "https://github.com/thetillhoff/webscan"
   license "MIT"
-  version "{{ .version }}"
+  version "${LATEST_VERSION}"
 
   on_macos do
     on_arm do
       url "#{homepage}/releases/download/#{version}/webscan_darwin_arm64"
-      sha256 "{{ .macos_arm_sha }}"
+      sha256 "${$MACOS_ARM_SHA}"
     end
 
     on_intel do
       url "#{homepage}/releases/download/#{version}/webscan_darwin_amd64"
-      sha256 "{{ .macos_intel_sha }}"
+      sha256 "${MACOS_INTEL_SHA}"
     end
   end
 
   on_linux do
     on_arm do
       url "#{homepage}/releases/download/#{version}/webscan_linux_arm64"
-      sha256 "{{ .linux_arm_sha }}"
+      sha256 "${$LINUX_ARM_SHA}"
     end
 
     on_intel do
       url "#{homepage}/releases/download/#{version}/webscan_linux_amd64"
-      sha256 "{{ .linux_intel_sha }}"
+      sha256 "${$LINUX_INTEL_SHA}"
     end
   end
 

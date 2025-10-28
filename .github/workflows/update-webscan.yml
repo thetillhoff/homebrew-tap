@@ -78,16 +78,7 @@ jobs:
           LINUX_INTEL_SHA=$(cat ./checksums/webscan_linux_amd64.sha256)
           LINUX_ARM_SHA=$(cat ./checksums/webscan_linux_arm64.sha256)
 
-          cp template/webscan.rb Formula/webscan.rb
-
-          # Update version
-          sed -i "s/{{ .version }}/$LATEST_VERSION/g" Formula/webscan.rb
-
-          # Update SHA256 values
-          sed -i "s/{{ .macos_intel_sha }}/$MACOS_INTEL_SHA/g" Formula/webscan.rb
-          sed -i "s/{{ .macos_arm_sha }}/$MACOS_ARM_SHA/g" Formula/webscan.rb
-          sed -i "s/{{ .linux_intel_sha }}/$LINUX_INTEL_SHA/g" Formula/webscan.rb
-          sed -i "s/{{ .linux_arm_sha }}/$LINUX_ARM_SHA/g" Formula/webscan.rb
+          envsubst < template/webscan.rb > Formula/webscan.rb
 
       - name: Commit update
         run: |
