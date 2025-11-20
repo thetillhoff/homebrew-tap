@@ -17,7 +17,7 @@ jobs:
       current_version: ${{ steps.check_releases.outputs.CURRENT_VERSION }}
     steps:
       - name: Checkout tap repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Check for new temingo releases
         id: check_releases
@@ -48,7 +48,7 @@ jobs:
           curl -sLO "https://github.com/thetillhoff/temingo/releases/download/$LATEST_VERSION/temingo_${{ matrix.os }}_${{ matrix.arch }}.sha256"
 
       - name: Upload SHA256 artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: temingo_${{ matrix.os }}_${{ matrix.arch }}.sha256
           path: temingo_${{ matrix.os }}_${{ matrix.arch }}.sha256
@@ -59,10 +59,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout tap repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Download all SHA256 artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           pattern: temingo_*.sha256
           path: ./checksums
@@ -70,24 +70,17 @@ jobs:
 
       - name: Update formula
         run: |
-          LATEST_VERSION="${{ needs.check-version.outputs.latest_version }}"
+          export LATEST_VERSION="${{ needs.check-version.outputs.latest_version }}"
 
           # Extract SHA256 values from downloaded files
-          MACOS_INTEL_SHA=$(cat ./checksums/temingo_darwin_amd64.sha256)
-          MACOS_ARM_SHA=$(cat ./checksums/temingo_darwin_arm64.sha256)
-          LINUX_INTEL_SHA=$(cat ./checksums/temingo_linux_amd64.sha256)
-          LINUX_ARM_SHA=$(cat ./checksums/temingo_linux_arm64.sha256)
+          export MACOS_INTEL_SHA=$(cat ./checksums/temingo_darwin_amd64.sha256)
+          export MACOS_ARM_SHA=$(cat ./checksums/temingo_darwin_arm64.sha256)
+          export LINUX_INTEL_SHA=$(cat ./checksums/temingo_linux_amd64.sha256)
+          export LINUX_ARM_SHA=$(cat ./checksums/temingo_linux_arm64.sha256)
 
-          cp template/temingo.rb Formula/temingo.rb
+          envsubst < template/temingo.rb > Formula/temingo.rb
 
-          # Update version
-          sed -i "s/{{ .version }}/$LATEST_VERSION/g" Formula/temingo.rb
-
-          # Update SHA256 values
-          sed -i "s/{{ .macos_intel_sha }}/$MACOS_INTEL_SHA/g" Formula/temingo.rb
-          sed -i "s/{{ .macos_arm_sha }}/$MACOS_ARM_SHA/g" Formula/temingo.rb
-          sed -i "s/{{ .linux_intel_sha }}/$LINUX_INTEL_SHA/g" Formula/temingo.rb
-          sed -i "s/{{ .linux_arm_sha }}/$LINUX_ARM_SHA/g" Formula/temingo.rb
+          cat Formula/temingo.rb
 
       - name: Commit update
         run: |

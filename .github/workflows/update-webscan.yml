@@ -80,6 +80,8 @@ jobs:
 
           envsubst < template/webscan.rb > Formula/webscan.rb
 
+          cat Formula/webscan.rb
+
       - name: Commit update
         run: |
           git config --global user.name 'GitHub Actions'
