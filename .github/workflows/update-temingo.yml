@@ -1,0 +1,97 @@
+name: Update temingo formula
+
+on:
+  schedule:
+    # Check for updates daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch: # Allow manual triggering
+
+permissions:
+  contents: write
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    outputs:
+      latest_version: ${{ steps.check_releases.outputs.LATEST_VERSION }}
+      current_version: ${{ steps.check_releases.outputs.CURRENT_VERSION }}
+    steps:
+      - name: Checkout tap repository
+        uses: actions/checkout@v4
+
+      - name: Check for new temingo releases
+        id: check_releases
+        run: |
+          # Get the latest release from temingo repository
+          LATEST_VERSION=$(curl -s https://api.github.com/repos/thetillhoff/temingo/releases/latest | jq -r '.tag_name')
+
+          # Get current version from formula
+          CURRENT_VERSION=$(grep 'version "' Formula/temingo.rb | sed 's/.*version "\(.*\)".*/\1/')
+
+          echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_OUTPUT
+          echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+
+  fetch-checksums:
+    needs: check-version
+    if: needs.check-version.outputs.latest_version != needs.check-version.outputs.current_version
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [darwin, linux]
+        arch: [amd64, arm64]
+    steps:
+      - name: Fetch SHA256
+        run: |
+          LATEST_VERSION="${{ needs.check-version.outputs.latest_version }}"
+
+          # Download the SHA256 file
+          curl -sLO "https://github.com/thetillhoff/temingo/releases/download/$LATEST_VERSION/temingo_${{ matrix.os }}_${{ matrix.arch }}.sha256"
+
+      - name: Upload SHA256 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: temingo_${{ matrix.os }}_${{ matrix.arch }}.sha256
+          path: temingo_${{ matrix.os }}_${{ matrix.arch }}.sha256
+
+  update-formula:
+    needs: [check-version, fetch-checksums]
+    if: needs.check-version.outputs.latest_version != needs.check-version.outputs.current_version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout tap repository
+        uses: actions/checkout@v4
+
+      - name: Download all SHA256 artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: temingo_*.sha256
+          path: ./checksums
+          merge-multiple: true
+
+      - name: Update formula
+        run: |
+          LATEST_VERSION="${{ needs.check-version.outputs.latest_version }}"
+
+          # Extract SHA256 values from downloaded files
+          MACOS_INTEL_SHA=$(cat ./checksums/temingo_darwin_amd64.sha256)
+          MACOS_ARM_SHA=$(cat ./checksums/temingo_darwin_arm64.sha256)
+          LINUX_INTEL_SHA=$(cat ./checksums/temingo_linux_amd64.sha256)
+          LINUX_ARM_SHA=$(cat ./checksums/temingo_linux_arm64.sha256)
+
+          cp template/temingo.rb Formula/temingo.rb
+
+          # Update version
+          sed -i "s/{{ .version }}/$LATEST_VERSION/g" Formula/temingo.rb
+
+          # Update SHA256 values
+          sed -i "s/{{ .macos_intel_sha }}/$MACOS_INTEL_SHA/g" Formula/temingo.rb
+          sed -i "s/{{ .macos_arm_sha }}/$MACOS_ARM_SHA/g" Formula/temingo.rb
+          sed -i "s/{{ .linux_intel_sha }}/$LINUX_INTEL_SHA/g" Formula/temingo.rb
+          sed -i "s/{{ .linux_arm_sha }}/$LINUX_ARM_SHA/g" Formula/temingo.rb
+
+      - name: Commit update
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'github-actions@users.noreply.github.com'
+          git commit -am "Automated update"
+          git push
