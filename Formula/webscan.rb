@@ -2,7 +2,7 @@ class Webscan < Formula
   desc "Verifies web things"
   homepage "https://github.com/thetillhoff/webscan"
   license "MIT"
-  version "v4.1.0"
+  version "v4.0.0"
 
   on_macos do
     on_arm do
