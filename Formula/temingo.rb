@@ -2,29 +2,29 @@ class Temingo < Formula
   desc "Minimal golang templater for websites"
   homepage "https://github.com/thetillhoff/temingo"
   license "MIT"
-  version "v2.4.0"
+  version "v2.5.0"
 
   on_macos do
     on_arm do
       url "#{homepage}/releases/download/#{version}/temingo_darwin_arm64"
-      sha256 "277aac13acbcdaf1108878048499bb256868fdbcbcfc2b178cedcce615d831c4"
+      sha256 "9e41b2b11d4773137bb13a4130e27a78dc5d04e3c7c3190700aacd2899af45d8"
     end
 
     on_intel do
       url "#{homepage}/releases/download/#{version}/temingo_darwin_amd64"
-      sha256 "d826448a7ac024cbf895e0e04f0cbdb93db76e6e695ddb905d93c0fe42be1301"
+      sha256 "fc170589078ecdda40157a24cdf513169d69cad5902ae6eebbfd5d75681d9d73"
     end
   end
 
   on_linux do
     on_arm do
       url "#{homepage}/releases/download/#{version}/temingo_linux_arm64"
-      sha256 "76be0750bf38cc324a0469bdb1fd3d247e2fd7557844f4657521a43e331991a9"
+      sha256 "b215a0f6f0594f816a988afcf64dea113009d016f24d3ce5541ffe761f58b59f"
     end
 
     on_intel do
       url "#{homepage}/releases/download/#{version}/temingo_linux_amd64"
-      sha256 "569122c7715f6838764572763512237380bef1bad56362b3d012314ee8397d80"
+      sha256 "8b98196d3a079c6dbd84e0450fb69eb025edef0911b8ef28942741725f85b4db"
     end
   end
 
