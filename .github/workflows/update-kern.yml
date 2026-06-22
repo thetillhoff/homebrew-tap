@@ -1,0 +1,81 @@
+name: Update kern formula
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    outputs:
+      latest_version: ${{ steps.check_releases.outputs.LATEST_VERSION }}
+      current_version: ${{ steps.check_releases.outputs.CURRENT_VERSION }}
+    steps:
+      - name: Checkout tap repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Check for new kern releases
+        id: check_releases
+        run: |
+          LATEST_VERSION=$(curl -s https://api.github.com/repos/thetillhoff/kern/releases/latest | jq -r '.tag_name')
+          CURRENT_VERSION=$(grep 'version "' Formula/kern.rb | sed 's/.*version "\(.*\)".*/\1/')
+
+          echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_OUTPUT
+          echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+
+  fetch-checksums:
+    needs: check-version
+    if: needs.check-version.outputs.latest_version != needs.check-version.outputs.current_version
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [darwin, linux]
+        arch: [amd64, arm64]
+    steps:
+      - name: Fetch SHA256
+        run: |
+          LATEST_VERSION="${{ needs.check-version.outputs.latest_version }}"
+          curl -sLO "https://github.com/thetillhoff/kern/releases/download/$LATEST_VERSION/kern_${{ matrix.os }}_${{ matrix.arch }}.sha256"
+
+      - name: Upload SHA256 artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: kern_${{ matrix.os }}_${{ matrix.arch }}.sha256
+          path: kern_${{ matrix.os }}_${{ matrix.arch }}.sha256
+
+  update-formula:
+    needs: [check-version, fetch-checksums]
+    if: needs.check-version.outputs.latest_version != needs.check-version.outputs.current_version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout tap repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Download all SHA256 artifacts
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          pattern: kern_*.sha256
+          path: ./checksums
+          merge-multiple: true
+
+      - name: Update formula
+        run: |
+          export LATEST_VERSION="${{ needs.check-version.outputs.latest_version }}"
+
+          export MACOS_INTEL_SHA=$(cat ./checksums/kern_darwin_amd64.sha256)
+          export MACOS_ARM_SHA=$(cat ./checksums/kern_darwin_arm64.sha256)
+          export LINUX_INTEL_SHA=$(cat ./checksums/kern_linux_amd64.sha256)
+          export LINUX_ARM_SHA=$(cat ./checksums/kern_linux_arm64.sha256)
+
+          envsubst < template/kern.rb > Formula/kern.rb
+
+          cat Formula/kern.rb
+
+      - name: Commit update
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'github-actions@users.noreply.github.com'
+          git commit -am "Automated update"
+          git push
