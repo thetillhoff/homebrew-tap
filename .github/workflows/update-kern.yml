@@ -18,9 +18,16 @@ jobs:
 
       - name: Check for new kern releases
         id: check_releases
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          LATEST_VERSION=$(curl -s https://api.github.com/repos/thetillhoff/kern/releases/latest | jq -r '.tag_name')
+          LATEST_VERSION=$(gh api repos/thetillhoff/kern/releases/latest --jq '.tag_name')
           CURRENT_VERSION=$(grep 'version "' Formula/kern.rb | sed 's/.*version "\(.*\)".*/\1/')
+
+          if [ -z "$LATEST_VERSION" ] || [ "$LATEST_VERSION" = "null" ]; then
+            echo "Failed to fetch latest release version" >&2
+            exit 1
+          fi
 
           echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_OUTPUT
           echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_OUTPUT
