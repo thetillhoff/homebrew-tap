@@ -1,6 +1,8 @@
 name: Update kern formula
 
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -8,6 +10,7 @@ permissions:
 
 jobs:
   check-version:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     outputs:
       latest_version: ${{ steps.check_releases.outputs.LATEST_VERSION }}
