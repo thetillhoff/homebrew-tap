@@ -24,7 +24,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          LATEST_VERSION=$(gh api repos/thetillhoff/kern/releases/latest --jq '.tag_name')
+          LATEST_VERSION=$(gh api repos/thetillhoff/kern/releases/latest --jq '.tag_name' 2>/dev/null || true)
           CURRENT_VERSION=$(grep 'version "' Formula/kern.rb | sed 's/.*version "\(.*\)".*/\1/')
 
           if [ -z "$LATEST_VERSION" ] || [ "$LATEST_VERSION" = "null" ]; then
