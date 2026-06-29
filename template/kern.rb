@@ -6,30 +6,35 @@ class Kern < Formula
 
   on_macos do
     on_arm do
-      url "#{homepage}/releases/download/#{version}/kern_darwin_arm64"
+      url "#{homepage}/releases/download/#{version}/kern_darwin_arm64.tar.gz"
       sha256 "${MACOS_ARM_SHA}"
     end
 
     on_intel do
-      url "#{homepage}/releases/download/#{version}/kern_darwin_amd64"
+      url "#{homepage}/releases/download/#{version}/kern_darwin_amd64.tar.gz"
       sha256 "${MACOS_INTEL_SHA}"
     end
   end
 
   on_linux do
     on_arm do
-      url "#{homepage}/releases/download/#{version}/kern_linux_arm64"
+      url "#{homepage}/releases/download/#{version}/kern_linux_arm64.tar.gz"
       sha256 "${LINUX_ARM_SHA}"
     end
 
     on_intel do
-      url "#{homepage}/releases/download/#{version}/kern_linux_amd64"
+      url "#{homepage}/releases/download/#{version}/kern_linux_amd64.tar.gz"
       sha256 "${LINUX_INTEL_SHA}"
     end
   end
 
   def install
-    bin.install Dir["kern_*"].first => "kern"
+    libexec.install "kern", "theme", "assets", "export-html"
+    (bin/"kern").write <<~SHELL
+      #!/bin/sh
+      export PI_PACKAGE_DIR="#{libexec}"
+      exec "#{libexec}/kern" "$@"
+    SHELL
   end
 
   test do
