@@ -29,7 +29,7 @@ class Kern < Formula
   end
 
   def install
-    libexec.install "kern", "theme", "assets", "export-html"
+    libexec.install "kern", "package.json", "theme", "assets", "export-html"
     (bin/"kern").write <<~SHELL
       #!/bin/sh
       export PI_PACKAGE_DIR="#{libexec}"
