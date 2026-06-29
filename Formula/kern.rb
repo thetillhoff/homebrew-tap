@@ -2,34 +2,34 @@ class Kern < Formula
   desc "Pi coding agent harness with model routing, bash safety, and subagent delegation"
   homepage "https://github.com/thetillhoff/kern"
   license "MIT"
-  version "v0.1.1"
+  version "v0.1.2"
 
   on_macos do
     on_arm do
       url "#{homepage}/releases/download/#{version}/kern_darwin_arm64.tar.gz"
-      sha256 "93be95dc75850d6c842ab31e459983eda0397a836d126a8e084512a1637d0027"
+      sha256 "29d92c155de5279f6a87f75397a17abc37be7454d68136f3e2060bb89645e457"
     end
 
     on_intel do
       url "#{homepage}/releases/download/#{version}/kern_darwin_amd64.tar.gz"
-      sha256 "5d695f4783be378a1407c938256a1742f34d6a34dbda2ec05ce6d06477ce238d"
+      sha256 "34733cb4885c089545b43255ff622234156c9f662401d6c503869fd7c13e5aa7"
     end
   end
 
   on_linux do
     on_arm do
       url "#{homepage}/releases/download/#{version}/kern_linux_arm64.tar.gz"
-      sha256 "67fcf005757e5644a10dcf248aa18687990a11fbece51ea4e890118d623ded1d"
+      sha256 "fb8030768bad14576c12969af3d417e90a16b12d6fdd0963b308c7faf5a5c249"
     end
 
     on_intel do
       url "#{homepage}/releases/download/#{version}/kern_linux_amd64.tar.gz"
-      sha256 "0301da863c3d9a8d2b163cd51abc28c5582cc95bdad9d7d2ff430ff8d6e7acf4"
+      sha256 "178cae3084a17e983bb24f163c997742329f15823a6fb0c54ceb92bd4fe125ec"
     end
   end
 
   def install
-    libexec.install "kern", "theme", "assets", "export-html"
+    libexec.install "kern", "package.json", "theme", "assets", "export-html"
     (bin/"kern").write <<~SHELL
       #!/bin/sh
       export PI_PACKAGE_DIR="#{libexec}"
