@@ -33,6 +33,7 @@ class Kern < Formula
     (bin/"kern").write <<~SHELL
       #!/bin/sh
       export PI_PACKAGE_DIR="#{libexec}"
+      export PI_SKIP_VERSION_CHECK=1
       exec "#{libexec}/kern" "$@"
     SHELL
   end
