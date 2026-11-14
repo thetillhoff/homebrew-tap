@@ -2,29 +2,29 @@ class Webscan < Formula
   desc "Verifies web things"
   homepage "https://github.com/thetillhoff/webscan"
   license "MIT"
-  version "v5.4.57"
+  version "v5.4.58"
 
   on_macos do
     on_arm do
       url "#{homepage}/releases/download/#{version}/webscan_darwin_arm64"
-      sha256 "866c0daebd27fbaf381a727144df1e2e3cff3be7ad5c86fcafc0f5f6bd302fa9"
+      sha256 "b31e0de44f3e27505e78655a365ca59c12e22e4d412ea2bc9a472f6b6f70bb26"
     end
 
     on_intel do
       url "#{homepage}/releases/download/#{version}/webscan_darwin_amd64"
-      sha256 "b544a119417529303f0a3c5fef64b0dc9bad433dc5b448c7a3fbd070cfd01cba"
+      sha256 "32fd862cf1378fe4862b54ee3fda9911000149c3bd11eba709650b2d51182ca0"
     end
   end
 
   on_linux do
     on_arm do
       url "#{homepage}/releases/download/#{version}/webscan_linux_arm64"
-      sha256 "08a83862dbd6f54d330781d83abcc60eebf467d91d8dabb0e42b59dafa6325da"
+      sha256 "94d19528985ab541cec08a6328ae1f8fdbb608cf5e0a19abc8be31b2762b2244"
     end
 
     on_intel do
       url "#{homepage}/releases/download/#{version}/webscan_linux_amd64"
-      sha256 "3b78e4989fd415373c7bd3c9c08102015e9a91705aaec07ff3511d0dc23da3f0"
+      sha256 "cb12a429da44aeab584efac938d2ab31b08ea9dfd6e69eb37060fbc62ede9dbe"
     end
   end
 
